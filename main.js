@@ -7,19 +7,29 @@ const todos = [];
 // Keep the same name so that your other function still calls it!
 function printTodo(todo) {
   // Use `document.createElement` to make an li
-
+  const myLi = document.createElement("li");
+  myLi.innerText = todo;
 
   // Put the ul that's already in our html file in a variable.
-
+  // const ulContainer = document.querySelector(".todo-list");
   // Append the li we made to the ul as the last child.
+  // ulContainer.appendChild(myLi);
+
+  let theUl = document.querySelector(".todo-list");
+  theUl.insertBefore(myLi, theUl.childNodes[0]);
 }
 
-
 // Add an event listener to the ADD button to run a function that we'll write shortly that adds todos.
-
-
+const addItemButton = document.querySelector(".add-todo");
+addItemButton.onclick = addTodoOnDom;
 // Now write the function that the event listener will run. It will take what's in the user input and add it to the todo list array.
-
+function addTodoOnDom() {
+  const addToDoInputBox = document.querySelector(".todo-input");
+  let boxValue = addToDoInputBox.value;
+  addTodo(boxValue);
+  printTodo(boxValue);
+  addToDoInputBox.value = "";
+}
 /*
 
 Here's what it'll do, in order. Feel free to put these comments in your function!
@@ -39,12 +49,19 @@ Here's what it'll do, in order. Feel free to put these comments in your function
 
 */
 
-
 // Add an event listener to the REMOVE button to run a function that we'll write shortly that removes todos.
-
-
+const removeItemButton = document.querySelector(".remove-todo");
+removeItemButton.onclick = removeItemOnDom;
 // Now write the function that the event listener will run. It will take what's in the user input and remove it from the todo list array.
-
+function removeItemOnDom() {
+  const addIndexInputBox = document.querySelector(".index-input");
+  let inputedText = addIndexInputBox.value;
+  let index = Number(inputedText);
+  todos.splice(index, 1);
+  clearDom();
+  printList();
+  addIndexInputBox.value = "";
+}
 /* Here's what it'll do, in order. Feel free to put these comments in your function!
 
 
@@ -59,6 +76,13 @@ Here's what it'll do, in order. Feel free to put these comments in your function
 */
 
 // Write a function that erases everything from the list.
+
+function clearDom() {
+  let myUlContainerr = document.querySelector(".todo-list");
+  while (myUlContainerr.firstChild) {
+    myUlContainerr.removeChild(myUlContainerr.firstChild);
+  }
+}
 
 /*
 
@@ -78,21 +102,20 @@ Here's what it'll do, in order. Feel free to put these comments in your function
 // printList();
 // But whatever you named it, use those names!
 
-
 // A function that prints everything on our todo list, INDIVIDUALLY.
 // Make SURE to use the above function!
 function printList() {
-  let i = 0;
-  while (i < todos.length) {
+  let i = todos.length - 1;
+  while (i >= 0) {
     printTodo(todos[i]);
-    i = i + 1;
+    i--;
   }
 }
 
 // A function that adds an item to our todo list.
 // Where on the list should we add it?
 function addTodo(todo) {
-  todos.push(todo);
+  todos.unshift(todo);
 }
 
 // A function that removes an item at a given index from our todo list.
